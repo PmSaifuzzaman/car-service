@@ -33,19 +33,25 @@ const AuthProvider = ({ children }) => {
             console.log('current user', currentUser);
             setLoading(false);
 
-
+            const userEmail = currentUser?.email || user?.email
+            const loggedUser = {email: userEmail}
 
             // If user exist then create a token
             if(currentUser){
-                const loggedUser = {email: currentUser.email}
                 axios.post('http://localhost:5000/jwt', loggedUser, {withCredentials: true})
                 .then(res => {
                     console.log('token-response', res.data)
                 })
             }
+            else{
+                axios.post('http://localhost:5000/logout', loggedUser, {withCredentials: true})
+                .then(res => {
+                    console.log(res.data)
+                })
+            }
 
 
-            
+
         });
         return () => {
             return unsubscribe();
